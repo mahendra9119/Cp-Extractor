@@ -72,7 +72,7 @@ async def start(bot, message):
 
   await message.reply_photo(
     photo=random_image_url,
-    caption="**Developer - @pwextractowner\nPLEASE👇PRESS👇HERE**",
+    caption="**Developer - @Mahendra9119\nPLEASE👇PRESS👇HERE**",
     quote=True,
     reply_markup=reply_markup
   )
@@ -1649,4 +1649,30 @@ async def process_appxwp(bot: Client, m: Message, user_id: int):
 
 
                                         
-bot.run()
+import os
+from flask import Flask
+from threading import Thread
+from pyrogram import Client, filters
+from config import api_id, api_hash, bot_token, auth_users
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Cp-Extractor Bot is running!"
+
+bot = Client("CpExtractorBot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
+
+@bot.on_message(filters.command("start") & filters.private)
+async def start(client, message):
+    if message.from_user.id in auth_users:
+        await message.reply("Welcome to Cp-Extractor Bot!")
+    else:
+        await message.reply("Unauthorized access.")
+
+def run_flask():
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
+
+def run_bot():
+    bot.run()
